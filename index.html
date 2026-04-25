@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VoiceShop AI - Tu Lista de la Compra Inteligente</title>
+    <meta name="description" content="Gestiona tu lista de la compra por voz. Rápido, moderno y eficiente.">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3514/3514491.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="header-content">
+                <h1>VoiceShop <span class="accent">AI</span></h1>
+                <p class="subtitle">¿Qué necesitas comprar?</p>
+            </div>
+            <div class="tabs">
+                <button id="tab-today" class="tab-btn active" onclick="setTab('today')">Hoy</button>
+                <button id="tab-tomorrow" class="tab-btn" onclick="setTab('tomorrow')">Mañana</button>
+            </div>
+        </header>
+
+        <main id="list-container">
+            <div id="empty-state" class="empty-state">
+                <i data-lucide="shopping-cart" class="empty-icon"></i>
+                <p>Tu lista está vacía</p>
+                <span class="hint">Pulsa el micro para añadir algo</span>
+            </div>
+            <ul id="shopping-list" class="shopping-list">
+                <!-- Items will be injected here -->
+            </ul>
+        </main>
+
+        <div id="voice-overlay" class="voice-overlay hidden">
+            <div class="voice-card">
+                <div class="pulse-ring"></div>
+                <i data-lucide="mic" class="mic-icon-large"></i>
+                <p id="voice-status">Escuchando...</p>
+                <p id="transcript-preview" class="transcript-preview"></p>
+                <button onclick="stopListening()" class="close-overlay">Cancelar</button>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <div class="input-group">
+                <input type="text" id="manual-input" placeholder="O escribe aquí..." aria-label="Entrada manual">
+                <button id="add-manual" class="add-btn" onclick="addManualItem()">
+                    <i data-lucide="plus"></i>
+                </button>
+            </div>
+            <button id="mic-trigger" class="mic-btn" aria-label="Añadir por voz">
+                <i data-lucide="mic"></i>
+            </button>
+        </nav>
+    </div>
+
+    <div id="error-toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('SW registered');
+                }).catch(err => {
+                    console.log('SW registration failed:', err);
+                });
+            });
+        }
+        lucide.createIcons();
+    </script>
+</body>
+</html>
